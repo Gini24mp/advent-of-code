@@ -27,28 +27,52 @@ public class solution {
 
     }
 
+    public static void updateMap(HashMap<String, Integer> GameMap, HashMap<String, Integer> Map){
+        if(GameMap.get("blue").compareTo(Map.get("blue")) < 0){
+            GameMap.replace("blue", Map.get("blue"));
+        }
+        if(GameMap.get("red").compareTo(Map.get("red")) < 0){
+            GameMap.replace("red", Map.get("red"));
+        }
+        if(GameMap.get("green").compareTo(Map.get("green")) < 0){
+            GameMap.replace("green", Map.get("green"));
+        }
+    }
+
+    public static int processMap(HashMap<String, Integer> GameMap){
+        return GameMap.get("blue") * GameMap.get("red") * GameMap.get("green");
+    }
+
     public static int StartGameStrProcessing(String test){
         String TestArr[] = test.split(":");
-        int GameNum = Integer.parseInt(TestArr[0].replaceAll("[^0-9]", ""));
 
         String GameTurns[] = TestArr[1].split(";");
 
+        HashMap<String, Integer> GameMap = new HashMap<String, Integer>();
+
+        GameMap.put("blue", 0);
+        GameMap.put("red", 0);
+        GameMap.put("green", 0);            
+
         for(int i = 0; i < GameTurns.length; i++){
-            HashMap<String, Integer> GameMap = new HashMap<String, Integer>();
-            GameMap.put("blue", 0);
-            GameMap.put("red", 0);
-            GameMap.put("green", 0);            
-            processGameTurn(GameTurns[i], GameMap);
-            if(!possible(GameMap)){
-                return 0;
-            }
+            HashMap<String, Integer> Map = new HashMap<String, Integer>();
+
+            Map.put("blue", 0);
+            Map.put("red", 0);
+            Map.put("green", 0);
+
+            processGameTurn(GameTurns[i], Map);
+
+            updateMap(GameMap, Map);
+
         }
 
-        return GameNum;
+        return processMap(GameMap);
     }
 
 
     public static void main(String[] args){
+
         try {
             File myObj = new File("input.txt");
             Scanner myReader = new Scanner(myObj);
